@@ -1,0 +1,24 @@
+FROM plugins/npm:10
+
+# Create app directory
+WORKDIR /usr/src
+
+COPY . .
+
+# Install app dependencies
+# A wildcard is used to ensure both package.json AND package-lock.json are copied
+# where available (npm@5+)
+RUN cd Kep13318 && npm install  
+
+
+RUN cd Plex13318 && npm install 
+
+RUN cd MySql13318 && npm install 
+
+RUN cd Socket13318 && npm install 
+
+RUN cd Express && npm install 
+
+CMD cd Kep13318 && npm run all
+
+EXPOSE 80 3030
