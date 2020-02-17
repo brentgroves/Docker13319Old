@@ -1,26 +1,28 @@
 FROM node:10
 
 # Create app directory
-WORKDIR /usr/src
 
-COPY . .
+WORKDIR /usr/src/App13319/Config13319
+COPY ./Config13319 .
 
-# Install app dependencies
-# A wildcard is used to ensure both package.json AND package-lock.json are copied
-# where available (npm@5+)
+WORKDIR /usr/src/App13319/React13319
+COPY ./React13319/package.json ./React13319/package-lock.json* ./
+RUN npm cache clean --force && npm install
 
-RUN cd bpg_services && npm install
 
-RUN cd React13318 && npm install
+WORKDIR /usr/src/App13319/Feat13319
+COPY ./Feat13319/package.json ./Feat13319/package-lock.json* ./
+RUN npm cache clean --force && npm install
 
-RUN cd MySql13318 && npm install
+# copy app source to image _after_ npm install so that
+# application code changes don't bust the docker cache of npm install step
+WORKDIR /usr/src/App13319/React13319
+COPY ./React13319 .
 
-RUN cd Plex13318 && npm install
+WORKDIR /usr/src/App13319/Feat13319
+COPY ./Feat13319 .
 
-RUN cd Sproc13318 && npm install
+EXPOSE 3000 3030
 
-RUN cd Alarms13318 && npm install
-
-CMD cd Kep13318 && npm run all
-
-EXPOSE 80 3000
+WORKDIR /usr/src/App13319/Feat13319
+CMD [ "npm", "run", "all" ]

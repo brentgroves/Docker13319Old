@@ -11,12 +11,6 @@ services:
     ports:
       - 3305:3306
 
-  adminer:
-    image: adminer
-    restart: always
-    ports:
-      - 8080:8080
-
   app:
     build: .
     ports:
