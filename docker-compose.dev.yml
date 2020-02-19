@@ -1,0 +1,30 @@
+version: '3'
+
+services:
+  app13319:
+    build: .
+    ports:
+      - "80:3000"
+      #  The create-react-app is served up by the feathers app
+      #  so port 3030 is not needed
+      - "3030:3030"
+    volumes:
+      - .:/home/node/App13319
+      - node_modules1:/home/node/App13319/Feat13319/node_modules
+      - node_modules2:/home/node/App13319/React13319/node_modules
+    # Wait for mysql to start before running this app
+    command: ["/wait-for-it.sh", "db:3306", "--", "/home/node/App13319/Feat13319/start-dev.sh"]
+  db:
+    ports:
+      # This assumes a sql server is already running on the production server
+      # This allows connection to it from the host using dbeaver
+      # Should stop the host Mysql from booting at start up for better performance
+      - "3305:3306"
+    volumes:
+      # don't know what the localtime binding is for?
+      - /etc/localtime:/etc/localtime:ro
+      - /home/brent/mysql:/var/lib/mysql
+
+volumes:
+  node_modules1:
+  node_modules2:

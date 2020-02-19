@@ -2,8 +2,9 @@ version: '3'
 
 services:
   app13319:
-    build: .
-    image: app13319
+    image: brentgroves/app13319:latest
+    depends_on:
+      - db
     container_name: app13319
     restart: unless-stopped
     env_file: .env
@@ -12,22 +13,23 @@ services:
       - MYSQL_USERNAME=$MYSQL_USERNAME
       - MYSQL_PASSWORD=$MYSQL_PASSWORD
       - MYSQL_DATABASE=$MYSQL_DATABASE
-      - REACT_APP_FEATHERS_HOSTNAME=$REACT_APP_FEATHERS_HOSTNAME
-      - REACT_APP_FEATHERS_PORT=$REACT_APP_FEATHERS_PORT
+#  There is an .env file in the React13319 folder.
+#  Which is used during the npm run build step
+#  The values at the time of the build will be hard coded into
+#  js files.  During development the port value should be set to
+#  3030 since we are debugging it from the React13319 folder by running
+# npm start, but in production this app will
+#  served up by the Feathers app so the port is set to 80,
+#  since port 80 of the host machine is being mapped to port 3000
+#  of the docker container
+#      - REACT_APP_FEATHERS_HOSTNAME=$REACT_APP_FEATHERS_HOSTNAME
+#      - REACT_APP_FEATHERS_PORT=$REACT_APP_FEATHERS_PORT
       - MSSQL_USER=$MSSQL_USER
       - MSSQL_PASSWORD=$MSSQL_PASSWORD
       - MSSQL_DATABASE=$MSSQL_DATABASE
       - MSSQL_SERVER=$MSSQL_SERVER
-    ports:
-      - "80:3000"
-      - "3030:3030"
-    volumes:
-      - .:/home/node/App13319
-      - node_modules1:/home/node/App13319/Feat13319/node_modules
-      - node_modules2:/home/node/App13319/React13319/node_modules
     networks:
       - app-network
-    command: ["/wait-for-it.sh", "db:3306", "--", "/home/node/App13319/Feat13319/start-prod.sh"]
   db:
     image: mysql
     container_name: db
@@ -37,17 +39,8 @@ services:
     environment:
       - MYSQL_DATABASE=$MYSQL_DATABASE
       - MYSQL_ROOT_PASSWORD=$MYSQL_PASSWORD
-    ports:
-      - "3305:3306"
-    volumes:
-      - /etc/localtime:/etc/localtime:ro
-      - /home/brent/mysql:/var/lib/mysql
     networks:
       - app-network
 networks:
   app-network:
     driver: bridge
-
-volumes:
-  node_modules1:
-  node_modules2:
