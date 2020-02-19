@@ -22,8 +22,10 @@ services:
 #  served up by the Feathers app so the port is set to 80,
 #  since port 80 of the host machine is being mapped to port 3000
 #  of the docker container
-#      - REACT_APP_FEATHERS_HOSTNAME=$REACT_APP_FEATHERS_HOSTNAME
-#      - REACT_APP_FEATHERS_PORT=$REACT_APP_FEATHERS_PORT
+# THESE VARIABLES ARE ALSO USED IN THE Feathers.index.js files
+# So we must uncomment them here for that reason.
+      - REACT_APP_FEATHERS_HOSTNAME=$REACT_APP_FEATHERS_HOSTNAME
+      - REACT_APP_FEATHERS_PORT=$REACT_APP_FEATHERS_PORT
       - MSSQL_USER=$MSSQL_USER
       - MSSQL_PASSWORD=$MSSQL_PASSWORD
       - MSSQL_DATABASE=$MSSQL_DATABASE
