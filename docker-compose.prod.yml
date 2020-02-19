@@ -3,12 +3,10 @@ version: '3'
 services:
   app13319:
     ports:
-      #  The create-react-app is served up by the feathers app
-      #  so port 3000 is not needed
-      #  create-react-app is port 3000
-      # - "80:3000"
-      #  Feathers is port 3030
+      #  create-react-app is served by Feathers
       - "80:3030"
+      #  Feathers is port 3030
+      - "3030:3030"
     # Wait for mysql to start before running this app
     command: ["/wait-for-it.sh", "db:3306", "--", "/home/node/App13319/Feat13319/start-prod.sh"]
   db:
