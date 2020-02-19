@@ -3,10 +3,12 @@ version: '3'
 services:
   app13319:
     ports:
-      - "80:3000"
       #  The create-react-app is served up by the feathers app
-      #  so port 3030 is not needed
-      # - "3030:3030"
+      #  so port 3000 is not needed
+      #  create-react-app is port 3000
+      # - "80:3000"
+      #  Feathers is port 3030
+      - "80:3030"
     volumes:
       # Removing any volume bindings for application code,
       # so that code stays inside the container and can’t be changed from outside
