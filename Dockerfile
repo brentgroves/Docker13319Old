@@ -3,6 +3,9 @@ FROM node:10
 # Add wait-for-it
 COPY wait-for-it.sh /wait-for-it.sh
 RUN chmod +x /wait-for-it.sh
+COPY ./deploy.sh /
+RUN chmod +x /deploy.sh
+
 
 WORKDIR /home/node/App13319/React13319
 COPY ./React13319/package.json ./React13319/package-lock.json* ./
@@ -19,7 +22,8 @@ COPY ./Feat13319 .
 
 WORKDIR /home/node/App13319/React13319
 COPY ./React13319 .
-RUN ./deploy.sh
+
+RUN /deploy.sh
 
 EXPOSE 3000 3030
 
