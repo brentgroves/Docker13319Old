@@ -1,4 +1,4 @@
-FROM node:10
+FROM node:12
 
 # Add wait-for-it
 COPY wait-for-it.sh /wait-for-it.sh
