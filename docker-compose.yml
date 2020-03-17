@@ -2,7 +2,7 @@ version: '3'
 
 services:
   app13319:
-    image: brentgroves/app13319:0.8
+    image: brentgroves/app13319:0.9
     depends_on:
       - db
     container_name: app13319
