@@ -12,6 +12,7 @@ services:
       - .:/home/node/App13319
       - node_modules1:/home/node/App13319/Feat13319/node_modules
       - node_modules2:/home/node/App13319/React13319/node_modules
+      - node_modules3:/home/node/App13319/Alarms13319/node_modules      
     # Wait for mysql to start before running this app
     command: ["/wait-for-it.sh", "db:3306", "--", "/home/node/App13319/Feat13319/start-dev.sh"]
   db:
@@ -28,3 +29,4 @@ services:
 volumes:
   node_modules1:
   node_modules2:
+  node_modules3:    
