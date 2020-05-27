@@ -25,6 +25,7 @@ services:
       # don't know what the localtime binding is for?
       - /etc/localtime:/etc/localtime:ro
       - /home/brent/mysql:/var/lib/mysql
+      - /home/brent/mysqlconf:/etc/mysql/conf.d
 
 volumes:
   node_modules1:
