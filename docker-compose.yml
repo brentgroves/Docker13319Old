@@ -22,7 +22,7 @@ services:
       - KORS_DATABASE=$KORS_DATABASE
       - KORS_SERVER=$KORS_SERVER
       - FEATHERS_PORT=$FEATHERS_PORT
-      - MQTT=$MQTT
+      - MQTT_SERVER=$MQTT_SERVER
     networks:
       - app-network
   db:
