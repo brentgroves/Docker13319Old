@@ -20,3 +20,10 @@ services:
       - /etc/localtime:/etc/localtime:ro
       - /home/brent/mysql:/var/lib/mysql
       - /home/brent/mysqlconf:/etc/mysql/conf.d
+  mqtt2:
+    ports:
+      # If host has a mosquitto server running we need to map to an alternate port
+      # sudo ss -tulwn | grep LISTEN
+      - "1882:1883"
+    volumes:
+      - /opt/mqtt2:/mosquitto

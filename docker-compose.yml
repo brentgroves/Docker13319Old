@@ -22,7 +22,7 @@ services:
       - KORS_DATABASE=$KORS_DATABASE
       - KORS_SERVER=$KORS_SERVER
       - FEATHERS_PORT=$FEATHERS_PORT
-      - MQTT_SERVER=$MQTT_SERVER
+      - MQTT_SERVER=mqtt2
     networks:
       - app-network
   db:
@@ -34,6 +34,12 @@ services:
     environment:
       - MYSQL_DATABASE=$MYSQL_DATABASE
       - MYSQL_ROOT_PASSWORD=$MYSQL_PASSWORD
+    networks:
+      - app-network
+  mqtt2:
+    image: eclipse-mosquitto:1.6.10
+    container_name: mqtt2
+    restart: unless-stopped
     networks:
       - app-network
 networks:
