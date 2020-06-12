@@ -18,8 +18,8 @@ services:
     volumes:
       # don't know what the localtime binding is for?
       - /etc/localtime:/etc/localtime:ro
-      - /home/brent/mysql:/var/lib/mysql
-      - /home/brent/mysqlconf:/etc/mysql/conf.d
+      - /var/lib/volumes/mysql:/var/lib/mysql
+      - /etc/volumes/mysql/conf.d:/etc/mysql/conf.d    
   mqtt2:
     ports:
       # If host has a mosquitto server running we need to map to an alternate port
