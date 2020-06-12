@@ -26,4 +26,4 @@ services:
       # sudo ss -tulwn | grep LISTEN
       - "1882:1883"
     volumes:
-      - /opt/mqtt2:/mosquitto
+      - /etc/volumes/mosquitto:/mosquitto
