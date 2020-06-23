@@ -2,7 +2,7 @@ version: '3'
 
 services:
   app13319:
-    image: brentgroves/app13319:0.11
+    image: brentgroves/app13319:0.12
     depends_on:
       - db
     container_name: app13319
@@ -22,7 +22,9 @@ services:
       - KORS_DATABASE=$KORS_DATABASE
       - KORS_SERVER=$KORS_SERVER
       - FEATHERS_PORT=$FEATHERS_PORT
+      - OPCUA_ENDPOINT=$OPCUA_ENDPOINT
       - MQTT_SERVER=mqtt2
+      - MY_ENV=$MY_ENV
     networks:
       - app-network
   db:

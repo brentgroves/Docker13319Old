@@ -21,6 +21,9 @@ WORKDIR /home/node/App13319/Alarms13319
 COPY ./Alarms13319/package*.json ./
 RUN npm install
 
+WORKDIR /home/node/App13319/Kep13319
+COPY ./Kep13319/package*.json ./
+RUN npm install
 
 # Next, copy your application code with the appropriate permissions to the application directory on the container:
 # copy app source to image _after_ npm install so that
@@ -28,6 +31,7 @@ RUN npm install
 COPY ./React13319 /home/node/App13319/React13319
 COPY ./Feat13319 /home/node/App13319/Feat13319
 COPY ./Alarms13319 /home/node/App13319/Alarms13319
+COPY ./Kep13319 /home/node/App13319/Kep13319
 
 # build the React app.
 RUN /deploy.sh
