@@ -25,6 +25,10 @@ WORKDIR /home/node/App13319/Kep13319
 COPY ./Kep13319/package*.json ./
 RUN npm install
 
+WORKDIR /home/node/App13319/InsKep13319
+COPY ./InsKep13319/package*.json ./
+RUN npm install
+
 WORKDIR /home/node/App13319/Plex13319
 COPY ./Plex13319/package*.json ./
 RUN npm install
@@ -36,6 +40,7 @@ COPY ./React13319 /home/node/App13319/React13319
 COPY ./Feat13319 /home/node/App13319/Feat13319
 COPY ./Alarms13319 /home/node/App13319/Alarms13319
 COPY ./Kep13319 /home/node/App13319/Kep13319
+COPY ./InsKep13319 /home/node/App13319/InsKep13319
 COPY ./Plex13319 /home/node/App13319/Plex13319
 
 # build the React app.
