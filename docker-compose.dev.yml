@@ -9,6 +9,8 @@ services:
       #  Feathers is port 3030
       - "3030:3030"
     volumes:
+      # Sets the image and containers timezone to that of the host system
+      - /etc/localtime:/etc/localtime:ro
       - .:/home/node/App13319
       - node_modules1:/home/node/App13319/Feat13319/node_modules
       - node_modules2:/home/node/App13319/React13319/node_modules
@@ -25,7 +27,7 @@ services:
       # Should stop the host Mysql from booting at start up for better performance
       - "3305:3306"
     volumes:
-      # don't know what the localtime binding is for?
+      # Sets the image and containers timezone to that of the host system
       - /etc/localtime:/etc/localtime:ro
       - /var/lib/volumes/mysql:/var/lib/mysql
       - /etc/volumes/mysql/conf.d:/etc/mysql/conf.d       

@@ -42,6 +42,7 @@ COPY ./Alarms13319 /home/node/App13319/Alarms13319
 COPY ./Kep13319 /home/node/App13319/Kep13319
 COPY ./InsKep13319 /home/node/App13319/InsKep13319
 COPY ./Plex13319 /home/node/App13319/Plex13319
+COPY ./Config13319 /home/node/App13319/Config13319
 
 # build the React app.
 RUN /deploy.sh

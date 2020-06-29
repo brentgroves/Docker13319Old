@@ -31,6 +31,7 @@ services:
       - AVILLA_USER=$AVILLA_USER
       - AVILLA_PASSWORD=$AVILLA_PASSWORD
       - MY_ENV=$MY_ENV
+      - TZ=America/Fort_Wayne
     networks:
       - app-network
   db:
