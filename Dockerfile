@@ -33,6 +33,11 @@ WORKDIR /home/node/App13319/Plex13319
 COPY ./Plex13319/package*.json ./
 RUN npm install
 
+WORKDIR /home/node/App13319/SetupContainer13319
+COPY ./SetupContainer13319/package*.json ./
+RUN npm install
+
+
 # Next, copy your application code with the appropriate permissions to the application directory on the container:
 # copy app source to image _after_ npm install so that
 # application code changes don't bust the docker cache of npm install step
@@ -42,6 +47,7 @@ COPY ./Alarms13319 /home/node/App13319/Alarms13319
 COPY ./Kep13319 /home/node/App13319/Kep13319
 COPY ./InsKep13319 /home/node/App13319/InsKep13319
 COPY ./Plex13319 /home/node/App13319/Plex13319
+COPY ./SetupContainer13319 /home/node/App13319/SetupContainer13319
 COPY ./Config13319 /home/node/App13319/Config13319
 
 # build the React app.
