@@ -19,6 +19,7 @@ services:
       - node_modules5:/home/node/App13319/InsKep13319/node_modules      
       - node_modules6:/home/node/App13319/Plex13319/node_modules      
       - node_modules7:/home/node/App13319/SetupContainer13319/node_modules      
+      - node_modules8:/home/node/App13319/CompareContainer13319/node_modules      
     # Wait for mysql to start before running this app
     command: ["/wait-for-it.sh", "db:3306", "--", "/home/node/App13319/Docker13319/start-dev.sh"]
   db:
@@ -47,6 +48,8 @@ volumes:
   node_modules5:   
   node_modules6:   
   node_modules7:
+  node_modules8:
+    
 
   
 
