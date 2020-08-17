@@ -10,6 +10,7 @@ services:
     env_file: .env
     environment:
       - MYSQL_HOSTNAME=db
+      - MYSQL_PORT=$MYSQL_PORT 
       - MYSQL_USERNAME=$MYSQL_USERNAME
       - MYSQL_PASSWORD=$MYSQL_PASSWORD
       - MYSQL_DATABASE=$MYSQL_DATABASE
@@ -24,6 +25,7 @@ services:
       - FEATHERS_PORT=$FEATHERS_PORT
       - OPCUA_ENDPOINT=$OPCUA_ENDPOINT
       - MQTT_SERVER=mqtt2
+      - MQTT_PORT=$MQTT_PORT
       - PROD_WSDL=$PROD_WSDL
       - TEST_WSDL=$TEST_WSDL
       - ALBION_USER=$ALBION_USER
