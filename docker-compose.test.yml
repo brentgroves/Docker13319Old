@@ -22,8 +22,9 @@ services:
       - node_modules6:/home/node/App13319/Plex13319/node_modules      
       - node_modules7:/home/node/App13319/SetupContainer13319/node_modules      
       - node_modules8:/home/node/App13319/CompareContainer13319/node_modules      
-      - node_modules9:/home/node/App13319/UDP13319/node_modules      
-    # Wait for mysql to start before running this app
+      - node_modules9:/home/node/App13319/UDP13319/node_modules
+      - node_modules10:/home/node/App13319/Tracker13319/node_modules
+      # Wait for mysql to start before running this app
     command: ["/wait-for-it.sh", "db:3306", "--", "/home/node/App13319/Docker13319/start-test.sh"]
   db:
     ports:
@@ -53,7 +54,7 @@ volumes:
   node_modules7:
   node_modules8:
   node_modules9:
-   
+  node_modules10:
     
 
   
