@@ -45,6 +45,9 @@ WORKDIR /home/node/App13319/UDP13319
 COPY ./UDP13319/package*.json ./
 RUN npm install
 
+WORKDIR /home/node/App13319/Tracker13319
+COPY ./Tracker13319/package*.json ./
+RUN npm install
 
 # Next, copy your application code with the appropriate permissions to the application directory on the container:
 # copy app source to image _after_ npm install so that
@@ -59,6 +62,7 @@ COPY ./SetupContainer13319 /home/node/App13319/SetupContainer13319
 COPY ./CompareContainer13319 /home/node/App13319/CompareContainer13319
 COPY ./Config13319 /home/node/App13319/Config13319
 COPY ./UDP13319 /home/node/App13319/UDP13319
+COPY ./Tracker13319 /home/node/App13319/Tracker13319
 
 # build the React app.
 RUN /deploy.sh

@@ -1,0 +1,45 @@
+version: '3'
+
+services:
+  db:
+    image: mysql:8.0.19
+    container_name: db
+    command: --default-authentication-plugin=mysql_native_password
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      - MYSQL_DATABASE=$MYSQL_DATABASE
+      - MYSQL_ROOT_PASSWORD=$MYSQL_PASSWORD
+    networks:
+      - app-network
+    ports:
+      # This assumes a sql server is already running on the production server
+      # This allows connection to it from the host using dbeaver
+      # Should stop the host Mysql from booting at start up for better performance
+      - "3305:3306"
+    volumes:
+      # Sets the image and containers timezone to that of the host system
+      - /etc/localtime:/etc/localtime:ro
+      - /var/lib/volumes/mysql:/var/lib/mysql
+      - /etc/volumes/mysql/conf.d:/etc/mysql/conf.d       
+  mqtt2:
+    image: eclipse-mosquitto:1.6.10
+    container_name: mqtt2
+    restart: unless-stopped
+    networks:
+      - app-network
+
+    ports:
+      # If host has a mosquitto server running we need to map to an alternate port
+      # sudo ss -tulwn | grep LISTEN
+      - "1882:1883"
+    volumes:
+      - /etc/volumes/mosquitto:/mosquitto
+    
+
+networks:
+  app-network:
+    driver: bridge
+      
+
+   
