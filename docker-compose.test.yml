@@ -10,6 +10,7 @@ services:
       - "2222:2222/udp"
       #  Feathers is port 3030
       - "3030:3030"
+    stdin_open: true  
     volumes:
       # Sets the image and containers timezone to that of the host system
       - /etc/localtime:/etc/localtime:ro
