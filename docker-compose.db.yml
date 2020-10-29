@@ -1,0 +1,63 @@
+version: '3'
+
+services:
+  app13319:
+    build: .
+    ports:
+      #  create-react-app is port 3000
+      # - "80:3000"
+      #  UDP Server
+      #  - "2222:2222/udp"
+      #  Feathers is port 3030
+      - "3030:3030"
+    stdin_open: true  
+    volumes:
+      # Sets the image and containers timezone to that of the host system
+      - /etc/localtime:/etc/localtime:ro
+      - .:/home/node/App13319
+      - node_modules1:/home/node/App13319/Feat13319/node_modules
+      - node_modules2:/home/node/App13319/React13319/node_modules
+      - node_modules3:/home/node/App13319/Alarms13319/node_modules      
+      - node_modules4:/home/node/App13319/Kep13319/node_modules      
+      - node_modules5:/home/node/App13319/InsKep13319/node_modules      
+      - node_modules6:/home/node/App13319/Plex13319/node_modules      
+      - node_modules7:/home/node/App13319/SetupContainer13319/node_modules      
+      - node_modules8:/home/node/App13319/CompareContainer13319/node_modules      
+      - node_modules9:/home/node/App13319/UDP13319/node_modules
+      - node_modules10:/home/node/App13319/Tracker13319/node_modules
+      # Wait for mysql to start before running this app
+    command: ["/wait-for-it.sh", "db:3306", "--", "/home/node/App13319/Docker13319/start-db.sh"]
+  db:
+    ports:
+      # This assumes a sql server is already running on the production server
+      # This allows connection to it from the host using dbeaver
+      # Should stop the host Mysql from booting at start up for better performance
+      - "3305:3306"
+    volumes:
+      # Sets the image and containers timezone to that of the host system
+      - /etc/localtime:/etc/localtime:ro
+      - /var/lib/volumes/mysql:/var/lib/mysql
+      - /etc/volumes/mysql/conf.d:/etc/mysql/conf.d       
+  mqtt2:
+    ports:
+      # If host has a mosquitto server running we need to map to an alternate port
+      # sudo ss -tulwn | grep LISTEN
+      - "1882:1883"
+    volumes:
+      - /etc/volumes/mosquitto:/mosquitto
+volumes:
+  node_modules1:
+  node_modules2:
+  node_modules3:    
+  node_modules4:    
+  node_modules5:   
+  node_modules6:   
+  node_modules7:
+  node_modules8:
+  node_modules9:
+  node_modules10:
+    
+
+  
+
+   
