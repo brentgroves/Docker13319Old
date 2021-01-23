@@ -4,7 +4,9 @@ services:
   app13319:
     ports:
       #  create-react-app is served by Feathers
-      - "80:3030"
+      # NGINX PROXY SERVER REDIRECTS TO PORT 3030
+      # AND SERVER NAME MOTO OR TRACKER
+      # - "80:3030"
       #  UDP Server
       - "2222:2222/udp"
       #  Feathers is port 3030

@@ -1,8 +1,21 @@
 version: '3'
 
 services:
+  nginx-proxy:
+    image: jwilder/nginx-proxy
+    container_name: nginx-proxy
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+      - ./certs:/etc/nginx/certs
+    depends_on:
+      - app13319
+    networks:
+      - app-network
   app13319:
-    image: brentgroves/app13319:0.12
+    image: brentgroves/app13319:0.13.prod
     depends_on:
       - db
     container_name: app13319
@@ -34,6 +47,8 @@ services:
       - AVILLA_PASSWORD=$AVILLA_PASSWORD
       - NODE_ENV=$NODE_ENV
       - TZ=America/Fort_Wayne
+      - VIRTUAL_HOST=moto,motorest
+      - VIRTUAL_PORT=3030
     networks:
       - app-network
   db:

@@ -5,7 +5,7 @@ services:
     build: .
     ports:
       #  create-react-app is port 3000
-      - "80:3000"
+      # - "80:3000"
       #  UDP Server
       - "2222:2222/udp"
       #  Feathers is port 3030

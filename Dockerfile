@@ -1,4 +1,4 @@
-FROM node:12
+FROM node:10
 
 # Add wait-for-it
 # I am not sure whether or not to make the owner node.  Don't know if node user has enough 
@@ -68,7 +68,9 @@ COPY ./Tracker13319 /home/node/App13319/Tracker13319
 # build the React app.
 RUN /deploy.sh
 
-EXPOSE 3000 3030
-
+# ENV PORT 3000
+EXPOSE 3030
+# EXPOSE 3000 3030
+# sudo docker build –t brentgroves/app13319:0.13.prod . 
 # I think this cmd gets overriden by the docker compose yaml script.
 # CMD [ "npm", "run", "all" ]
