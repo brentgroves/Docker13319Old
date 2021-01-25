@@ -1,6 +1,15 @@
 version: '3'
-
 services:
+  react13319:
+    stdin_open: true  
+    volumes:
+        # Sets the image and containers timezone to that of the host system
+      - /etc/localtime:/etc/localtime:ro
+      - ./React13319:/home/node/App13319/React13319
+      - react_node_modules:/home/node/App13319/React13319/node_modules
+    # Wait for mysql to start before running this app
+    command: ["/home/node/App13319/React13319/start-react-dev.sh"]
+    # command: ["/wait-for-it.sh", "db:3306", "--", "/home/node/React13319/start-react-dev.sh"]
   app13319:
     build: .
     ports:
@@ -9,7 +18,7 @@ services:
       #  UDP Server
       - "2222:2222/udp"
       #  Feathers is port 3030
-      - "3030:3030"
+      # - "3030:3030"
     stdin_open: true  
     volumes:
         # Sets the image and containers timezone to that of the host system
@@ -56,6 +65,7 @@ volumes:
   node_modules8:
   node_modules9:
   node_modules10:
+  react_node_modules:
     
 
   

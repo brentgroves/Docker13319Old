@@ -11,7 +11,19 @@ services:
       - /var/run/docker.sock:/tmp/docker.sock:ro
       - ./certs:/etc/nginx/certs
     depends_on:
+      - react13319
+    networks:
+      - app-network
+  react13319:
+    image: brentgroves/react13319:0.13.dev
+    depends_on:
       - app13319
+    container_name: react13319
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      - VIRTUAL_HOST=$WEBAPP_HOST
+      - VIRTUAL_PORT=3000
     networks:
       - app-network
   app13319:
@@ -47,7 +59,7 @@ services:
       - AVILLA_PASSWORD=$AVILLA_PASSWORD
       - NODE_ENV=$NODE_ENV
       - TZ=America/Fort_Wayne
-      - VIRTUAL_HOST=moto,motorest
+      - VIRTUAL_HOST=$WEBSERVICE_HOST
       - VIRTUAL_PORT=3030
     networks:
       - app-network
