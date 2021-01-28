@@ -1,0 +1,156 @@
+version: '3'
+
+services:
+  nginx-proxy:
+    image: jwilder/nginx-proxy
+    container_name: nginx-proxy
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+      - ../certs:/etc/nginx/certs
+    depends_on:
+      - react13319
+    networks:
+      - app-network
+  react13319:
+    image: brentgroves/react13319:1.0.0
+    depends_on:
+      - app13319
+    container_name: react13319
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      - VIRTUAL_HOST=$WEBAPP_HOST
+      - VIRTUAL_PORT=3000
+    networks:
+      - app-network
+    stdin_open: true  
+    volumes:
+        # Sets the image and containers timezone to that of the host system
+      - /etc/localtime:/etc/localtime:ro
+      # We are using React13319 from outside of the App13319 directory
+      # So we can safely build both the app13319 and react13319 image
+      # which both use this app for different purposes
+      - ../React13319:/usr/src/app
+      - react13319_node_modules:/usr/src/app/node_modules
+    working_dir: /dir      
+    # Wait for mysql to start before running this app
+    command: ["npm start"]
+    # command: ["/wait-for-it.sh", "db:3306", "--", "/home/node/React13319/start-react-dev.sh"]
+
+  feat13319:
+    image: brentgroves/feat:1.0.0
+    depends_on:
+      - db
+    container_name: app13319
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      - MYSQL_HOSTNAME=db
+      - MYSQL_PORT=$MYSQL_PORT 
+      - MYSQL_USERNAME=$MYSQL_USERNAME
+      - MYSQL_PASSWORD=$MYSQL_PASSWORD
+      - MYSQL_DATABASE=$MYSQL_DATABASE
+      - MSSQL_USER=$MSSQL_USER
+      - MSSQL_PASSWORD=$MSSQL_PASSWORD
+      - MSSQL_DATABASE=$MSSQL_DATABASE
+      - MSSQL_SERVER=$MSSQL_SERVER
+      - KORS_USERNAME=$KORS_USERNAME
+      - KORS_PASSWORD=$KORS_PASSWORD
+      - KORS_DATABASE=$KORS_DATABASE
+      - KORS_SERVER=$KORS_SERVER
+      - FEATHERS_PORT=$FEATHERS_PORT
+      - OPCUA_ENDPOINT=$OPCUA_ENDPOINT
+      - MQTT_SERVER=mqtt2
+      - MQTT_PORT=$MQTT_PORT
+      - PROD_WSDL=$PROD_WSDL
+      - TEST_WSDL=$TEST_WSDL
+      - ALBION_USER=$ALBION_USER
+      - ALBION_PASSWORD=$ALBION_PASSWORD
+      - AVILLA_USER=$AVILLA_USER
+      - AVILLA_PASSWORD=$AVILLA_PASSWORD
+      - NODE_ENV=$NODE_ENV
+      - TZ=America/Fort_Wayne
+      - VIRTUAL_HOST=$WEBSERVICE_HOST
+      - VIRTUAL_PORT=3030
+    networks:
+      - app-network
+    # build: .
+    ports:
+      #  create-react-app is port 3000
+      # - "80:3000"
+      #  UDP Server
+      - "2222:2222/udp"
+      #  Feathers is port 3030
+      # - "3030:3030"
+    stdin_open: true  
+    volumes:
+        # Sets the image and containers timezone to that of the host system
+      - /etc/localtime:/etc/localtime:ro
+      - .:/home/node/App13319
+      - node_modules1:/home/node/App13319/Feat13319/node_modules
+      - node_modules2:/home/node/App13319/React13319/node_modules
+      - node_modules3:/home/node/App13319/Alarms13319/node_modules      
+      - node_modules4:/home/node/App13319/Kep13319/node_modules      
+      - node_modules5:/home/node/App13319/InsKep13319/node_modules      
+      - node_modules6:/home/node/App13319/Plex13319/node_modules      
+      - node_modules7:/home/node/App13319/SetupContainer13319/node_modules      
+      - node_modules8:/home/node/App13319/CompareContainer13319/node_modules      
+      - node_modules9:/home/node/App13319/UDP13319/node_modules      
+      - node_modules10:/home/node/App13319/Tracker13319/node_modules      
+    # Wait for mysql to start before running this app
+    command: ["/wait-for-it.sh", "db:3306", "--", "/home/node/App13319/Docker13319/start-dev.sh"]
+
+  db:
+    image: mysql:8.0.19
+    container_name: db
+    command: --default-authentication-plugin=mysql_native_password
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      - MYSQL_DATABASE=$MYSQL_DATABASE
+      - MYSQL_ROOT_PASSWORD=$MYSQL_PASSWORD
+    networks:
+      - app-network
+    ports:
+      # This assumes a sql server is already running on the production server
+      # This allows connection to it from the host using dbeaver
+      # Should stop the host Mysql from booting at start up for better performance
+      - "3305:3306"
+    volumes:
+      # Sets the image and containers timezone to that of the host system
+      - /etc/localtime:/etc/localtime:ro
+      - /var/lib/volumes/mysql:/var/lib/mysql
+      - /etc/volumes/mysql/conf.d:/etc/mysql/conf.d       
+
+  mqtt2:
+    image: eclipse-mosquitto:1.6.10
+    container_name: mqtt2
+    restart: unless-stopped
+    networks:
+      - app-network
+    ports:
+      # If host has a mosquitto server running we need to map to an alternate port
+      # sudo ss -tulwn | grep LISTEN
+      - "1882:1883"
+    volumes:
+      - /etc/volumes/mosquitto:/mosquitto
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  node_modules1:
+  node_modules2:
+  node_modules3:    
+  node_modules4:    
+  node_modules5:   
+  node_modules6:   
+  node_modules7:
+  node_modules8:
+  node_modules9:
+  node_modules10:
+  react_node_modules:
