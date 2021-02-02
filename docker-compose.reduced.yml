@@ -1,0 +1,146 @@
+version: '3'
+
+services:
+  db:
+    # Image params.  
+    env_file: .env
+    environment:
+      - MYSQL_DATABASE=$MYSQL_DATABASE
+      - MYSQL_ROOT_PASSWORD=$MYSQL_PASSWORD
+    command: --default-authentication-plugin=mysql_native_password
+    image: mysql:8.0.19
+    # Container params  
+    volumes:
+      # Sets the image and containers timezone to that of the host system
+      - /etc/localtime:/etc/localtime:ro
+      - /var/lib/volumes/mysql:/var/lib/mysql
+      - /etc/volumes/mysql/conf.d:/etc/mysql/conf.d       
+    networks:
+      - backend
+    ports:
+      # This assumes a sql server is already running on the production server
+      # This allows connection to it from the host using dbeaver
+      # Should stop the host Mysql from booting at start up for better performance
+      - "3305:3306"
+    restart: unless-stopped
+    container_name: db
+
+  mqtt2:
+    image: eclipse-mosquitto:1.6.10
+    # Container params  
+    restart: unless-stopped
+    networks:
+      - backend
+    ports:
+      # If host has a mosquitto server running we need to map to an alternate port
+      # sudo ss -tulwn | grep LISTEN
+      - "1882:1883"
+    volumes:
+      - /etc/volumes/mosquitto:/mosquitto
+    container_name: mqtt2
+
+  feat13319:
+    # Wait for other containers
+    depends_on:
+      - db
+      - mqtt2      
+    # Image params.  
+    env_file: .env
+    environment:
+      - MQTT_SERVER=mqtt2
+      - KORS_USERNAME=$KORS_USERNAME
+      - KORS_PASSWORD=$KORS_PASSWORD
+      - KORS_DATABASE=$KORS_DATABASE
+      - KORS_SERVER=$KORS_SERVER
+      - MSSQL_USER=$MSSQL_USER
+      - MSSQL_PASSWORD=$MSSQL_PASSWORD
+      - MSSQL_DATABASE=$MSSQL_DATABASE
+      - MSSQL_SERVER=$MSSQL_SERVER
+      - FEATHERS_PORT=$FEATHERS_PORT
+      - MQTT_PORT=$MQTT_PORT
+      - MYSQL_HOSTNAME=db
+      - MYSQL_PORT=$MYSQL_PORT 
+      - MYSQL_USERNAME=$MYSQL_USERNAME
+      - MYSQL_PASSWORD=$MYSQL_PASSWORD
+      - MYSQL_DATABASE=$MYSQL_DATABASE
+      - VIRTUAL_HOST=$WEBSERVICE_HOST
+      - VIRTUAL_PORT=3030
+    command: sh -c "dockerize -wait tcp://db:3306 -wait tcp://mqtt2:1883 npm start"
+    build:
+      context: ../Feat13319
+    image: brentgroves/feat13319:1.0.0
+
+    # Container params  
+    stdin_open: true  
+    volumes:
+      # Sets the image and containers timezone to that of the host system
+      - /etc/localtime:/etc/localtime:ro
+      # must be absolute path
+      - /home/brent/srcnode/App13319/Feat13319:/usr/src/app
+      - feat_node_modules:/usr/src/app/node_modules      
+    networks:
+      - backend
+    restart: unless-stopped
+    container_name: feat13319
+
+  react13319:
+    # Wait for other containers
+    depends_on:
+      - feat13319
+    # Image params.  
+    env_file: .env
+    environment:
+      # - NODE_ENV=$NODE_ENV
+      - VIRTUAL_HOST=$WEBAPP_HOST
+      - VIRTUAL_PORT=3000
+    command: sh -c "$REACT_CMD"
+    # command: sh -c "dockerize -wait tcp://feat13319:3030 $REACT_CMD"
+    build:
+      context: ../react13319
+    image: brentgroves/react13319:1.0.0
+
+    # Container params  
+    stdin_open: true  
+    volumes:
+      # Sets the image and containers timezone to that of the host system
+      - /etc/localtime:/etc/localtime:ro
+      # must be absolute path
+      - /home/brent/srcnode/App13319/react13319:/usr/src/app
+      - react_node_modules:/usr/src/app/node_modules      
+    # Wait for mqtt2 and mysql to start before running this app
+    # https://stackoverflow.com/questions/40454470/how-can-i-use-a-variable-inside-a-dockerfile-cmd
+    # command: sh -c "dockerize -wait tcp://feat13319:3030 npm start"
+    # command: sh -c "dockerize -wait tcp://feat13319:3030 http-server ./build --cors -p 3000"
+    networks:
+      - backend
+      # - frontend
+    restart: unless-stopped
+    container_name: react13319
+
+  nginx-proxy:
+    image: jwilder/nginx-proxy
+    container_name: nginx-proxy
+    depends_on:
+      - react13319
+      - feat13319
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+      - /home/brent/srcnode/App13319/certs:/etc/nginx/certs
+    networks:
+      # - frontend
+      # nginx must communicate with php-fpm from the backend network
+      - backend
+    ports:
+      - "80:80"
+      - "443:443"
+
+networks:
+  # frontend:
+  #   driver: bridge
+  backend:
+    driver: bridge
+
+
+volumes:
+  feat_node_modules:
+  react_node_modules:
