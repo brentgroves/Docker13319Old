@@ -112,8 +112,8 @@ services:
     # command: sh -c "dockerize -wait tcp://feat13319:3030 npm start"
     # command: sh -c "dockerize -wait tcp://feat13319:3030 http-server ./build --cors -p 3000"
     networks:
-      - backend
-      # - frontend
+      # - backend
+      - frontend
     restart: unless-stopped
     container_name: react13319
 
@@ -127,7 +127,7 @@ services:
       - /var/run/docker.sock:/tmp/docker.sock:ro
       - /home/brent/srcnode/App13319/certs:/etc/nginx/certs
     networks:
-      # - frontend
+      - frontend
       # nginx must communicate with php-fpm from the backend network
       - backend
     ports:
@@ -135,8 +135,8 @@ services:
       - "443:443"
 
 networks:
-  # frontend:
-  #   driver: bridge
+  frontend:
+    driver: bridge
   backend:
     driver: bridge
 
