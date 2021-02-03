@@ -18,25 +18,28 @@ function RemoveNodeModules() {
 # cd ../Feat13319
 # rm -rf node_modules
 
-RemoveNodeModules Alarms13319
+RemoveNodeModules ../react13319
+RemoveNodeModules ../feat13319
+rm -rf ../react13319/build
+# RemoveNodeModules Alarms13319
 
-RemoveNodeModules Feat13319
+# RemoveNodeModules Feat13319
 
-RemoveNodeModules Okuma13319
+# RemoveNodeModules Okuma13319
 
-RemoveNodeModules CompareContainer13319
+# RemoveNodeModules CompareContainer13319
 
-RemoveNodeModules Plex13319
+# RemoveNodeModules Plex13319
 
-RemoveNodeModules React13319
+# RemoveNodeModules React13319
 
-RemoveNodeModules InsKep13319
+# RemoveNodeModules InsKep13319
 
-RemoveNodeModules SetupContainer13319
+# RemoveNodeModules SetupContainer13319
 
-RemoveNodeModules Tracker13319
+# RemoveNodeModules Tracker13319
 
-RemoveNodeModules UDP13319
+# RemoveNodeModules UDP13319
 
 
 
