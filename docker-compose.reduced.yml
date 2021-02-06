@@ -108,6 +108,7 @@ services:
       # must be absolute path
       - /home/brent/srcnode/App13319/react13319:/usr/src/app
       - react_node_modules:/usr/src/app/node_modules      
+      - react_build:/usr/src/app/build      
     # Wait for mqtt2 and mysql to start before running this app
     # https://stackoverflow.com/questions/40454470/how-can-i-use-a-variable-inside-a-dockerfile-cmd
     # command: sh -c "dockerize -wait tcp://feat13319:3030 npm start"
@@ -145,3 +146,4 @@ networks:
 volumes:
   feat_node_modules:
   react_node_modules:
+  react_build:
