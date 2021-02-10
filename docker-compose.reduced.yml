@@ -163,7 +163,7 @@ services:
     environment:
       - MQTT_SERVER=mqtt2
       - MQTT_PORT=$MQTT_PORT
-    command: sh -c "dockerize -wait tcp://feat13319:3030 node app"
+    command: sh -c "dockerize -wait tcp://feat13319:3030 node index"
     build:
       context: ../mailer13319
     image: brentgroves/mailer13319:1.0.0
