@@ -17,10 +17,13 @@ function RemoveNodeModules() {
 
 # cd ../Feat13319
 # rm -rf node_modules
-
-RemoveNodeModules ../react13319
+RemoveNodeModules ../eng13319
+RemoveNodeModules ../tool13319
 RemoveNodeModules ../feat13319
-rm -rf ../react13319/build
+RemoveNodeModules ../mailer13319
+RemoveNodeModules ../alarms13319
+rm -rf ../tool13319/build
+rm -rf ../eng13319/build
 # RemoveNodeModules Alarms13319
 
 # RemoveNodeModules Feat13319

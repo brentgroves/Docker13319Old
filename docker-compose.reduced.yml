@@ -84,7 +84,7 @@ services:
     restart: unless-stopped
     container_name: feat13319
 
-  react13319:
+  tool13319:
     # Wait for other containers
     depends_on:
       - feat13319
@@ -92,13 +92,13 @@ services:
     env_file: .env
     environment:
       # - NODE_ENV=$NODE_ENV
-      - VIRTUAL_HOST=$WEBAPP_HOST
+      - VIRTUAL_HOST=$TOOL_PWA_HOST
       - VIRTUAL_PORT=3000
     # command: sh -c "$REACT_CMD"
     command: sh -c "dockerize -wait tcp://feat13319:3030 $REACT_CMD"
     build:
-      context: ../react13319
-    image: brentgroves/react13319:1.0.0
+      context: ../tool13319
+    image: brentgroves/tool13319:1.0.0
 
     # Container params  
     stdin_open: true  
@@ -106,9 +106,9 @@ services:
       # Sets the image and containers timezone to that of the host system
       - /etc/localtime:/etc/localtime:ro
       # must be absolute path
-      - /home/brent/srcnode/App13319/react13319:/usr/src/app
-      - react_node_modules:/usr/src/app/node_modules      
-      - react_build:/usr/src/app/build      
+      - /home/brent/srcnode/App13319/tool13319:/usr/src/app
+      - tool_node_modules:/usr/src/app/node_modules      
+      - tool_build:/usr/src/app/build      
     # Wait for mqtt2 and mysql to start before running this app
     # https://stackoverflow.com/questions/40454470/how-can-i-use-a-variable-inside-a-dockerfile-cmd
     # command: sh -c "dockerize -wait tcp://feat13319:3030 npm start"
@@ -117,13 +117,110 @@ services:
       - backend
       - frontend
     restart: unless-stopped
-    container_name: react13319
+    container_name: tool13319
+
+  eng13319:
+    # Wait for other containers
+    depends_on:
+      - feat13319
+    # Image params.  
+    env_file: .env
+    environment:
+      # - NODE_ENV=$NODE_ENV
+      - VIRTUAL_HOST=$ENG_PWA_HOST
+      - VIRTUAL_PORT=3000
+    # command: sh -c "$REACT_CMD"
+    command: sh -c "dockerize -wait tcp://feat13319:3030 $REACT_CMD"
+    build:
+      context: ../eng13319
+    image: brentgroves/eng13319:1.0.0
+
+    # Container params  
+    stdin_open: true  
+    volumes:
+      # Sets the image and containers timezone to that of the host system
+      - /etc/localtime:/etc/localtime:ro
+      # must be absolute path
+      - /home/brent/srcnode/App13319/eng13319:/usr/src/app
+      - eng_node_modules:/usr/src/app/node_modules      
+      - eng_build:/usr/src/app/build      
+    # Wait for mqtt2 and mysql to start before running this app
+    # https://stackoverflow.com/questions/40454470/how-can-i-use-a-variable-inside-a-dockerfile-cmd
+    # command: sh -c "dockerize -wait tcp://feat13319:3030 npm start"
+    # command: sh -c "dockerize -wait tcp://feat13319:3030 http-server ./build --cors -p 3000"
+    networks:
+      - backend
+      - frontend
+    restart: unless-stopped
+    container_name: eng13319
+
+  mailer13319:
+    # Wait for other containers
+    depends_on:
+      - eng13319
+    # Image params.  
+    env_file: .env
+    environment:
+      - MQTT_SERVER=mqtt2
+      - MQTT_PORT=$MQTT_PORT
+    command: sh -c "dockerize -wait tcp://feat13319:3030 node app"
+    build:
+      context: ../mailer13319
+    image: brentgroves/mailer13319:1.0.0
+
+    # Container params  
+    stdin_open: true  
+    volumes:
+      # Sets the image and containers timezone to that of the host system
+      - /etc/localtime:/etc/localtime:ro
+      # must be absolute path
+      - /home/brent/srcnode/App13319/mailer13319:/usr/src/app
+      - mailer_node_modules:/usr/src/app/node_modules      
+    # Wait for mqtt2 and mysql to start before running this app
+    # https://stackoverflow.com/questions/40454470/how-can-i-use-a-variable-inside-a-dockerfile-cmd
+    # command: sh -c "dockerize -wait tcp://feat13319:3030 npm start"
+    # command: sh -c "dockerize -wait tcp://feat13319:3030 http-server ./build --cors -p 3000"
+    networks:
+      - backend
+    restart: unless-stopped
+    container_name: mailer13319
+
+  alarms13319:
+    # Wait for other containers
+    depends_on:
+      - mailer13319
+    # Image params.  
+    env_file: .env
+    environment:
+      - MQTT_SERVER=mqtt2
+      - MQTT_PORT=$MQTT_PORT
+    command: sh -c "dockerize -wait tcp://feat13319:3030 node app"
+    build:
+      context: ../alarms13319
+    image: brentgroves/alarms13319:1.0.0
+
+    # Container params  
+    stdin_open: true  
+    volumes:
+      # Sets the image and containers timezone to that of the host system
+      - /etc/localtime:/etc/localtime:ro
+      # must be absolute path
+      - /home/brent/srcnode/App13319/alarms13319:/usr/src/app
+      - alarms_node_modules:/usr/src/app/node_modules      
+    # Wait for mqtt2 and mysql to start before running this app
+    # https://stackoverflow.com/questions/40454470/how-can-i-use-a-variable-inside-a-dockerfile-cmd
+    # command: sh -c "dockerize -wait tcp://feat13319:3030 npm start"
+    # command: sh -c "dockerize -wait tcp://feat13319:3030 http-server ./build --cors -p 3000"
+    networks:
+      - backend
+    restart: unless-stopped
+    container_name: alarms13319
 
   nginx-proxy:
     image: jwilder/nginx-proxy
     container_name: nginx-proxy
     depends_on:
-      - react13319
+      # - react13319
       - feat13319
     volumes:
       - /var/run/docker.sock:/tmp/docker.sock:ro
@@ -145,5 +242,9 @@ networks:
 
 volumes:
   feat_node_modules:
-  react_node_modules:
-  react_build:
+  tool_node_modules:
+  tool_build:
+  eng_node_modules:
+  eng_build:
+  alarms_node_modules:
+  mailer_node_modules:
