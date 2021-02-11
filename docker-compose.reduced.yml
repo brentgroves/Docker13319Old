@@ -39,6 +39,7 @@ services:
       - "1883:1883"
     volumes:
       - /etc/volumes/mosquitto:/mosquitto
+    restart: unless-stopped
     container_name: mqtt2
 
   feat13319:
@@ -206,22 +207,26 @@ services:
     container_name: mailer13319
 
   nginx-proxy:
-    image: jwilder/nginx-proxy
-    container_name: nginx-proxy
+    # Wait for other containers
     depends_on:
       - eng13319
       - tool13319
       - feat13319
+    # Image params.  
+    image: jwilder/nginx-proxy
+    # Container params  
     volumes:
       - /var/run/docker.sock:/tmp/docker.sock:ro
       - /home/brent/srcnode/App13319/certs:/etc/nginx/certs
+    ports:
+      - "80:80"
+      - "443:443"
     networks:
       - frontend
       # nginx must communicate with php-fpm from the backend network
       - backend
-    ports:
-      - "80:80"
-      - "443:443"
+    restart: unless-stopped
+    container_name: nginx-proxy
 
 networks:
   frontend:
