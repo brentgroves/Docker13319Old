@@ -14,11 +14,13 @@ function RemoveNodeModules() {
 
 RemoveNodeModules ../eng13319
 RemoveNodeModules ../tool13319
+RemoveNodeModules ../prod13319
 RemoveNodeModules ../feat13319
 RemoveNodeModules ../mailer13319
 RemoveNodeModules ../alarms13319
 rm -rf ../tool13319/build
 rm -rf ../eng13319/build
+rm -rf ../prod13319/build
 
 
 
