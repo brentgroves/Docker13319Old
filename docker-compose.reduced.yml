@@ -42,7 +42,7 @@ services:
     restart: unless-stopped
     container_name: mqtt2
 
-  feat13319:
+  eng13319api:
     # Wait for other containers
     depends_on:
       - db
@@ -66,13 +66,12 @@ services:
       - MYSQL_USERNAME=$MYSQL_USERNAME
       - MYSQL_PASSWORD=$MYSQL_PASSWORD
       - MYSQL_DATABASE=$MYSQL_DATABASE
-      - VIRTUAL_HOST=$WEBSERVICE_HOST
+      - VIRTUAL_HOST=$ENG_API_HOST
       - VIRTUAL_PORT=3030
-    command: sh -c "dockerize -wait tcp://db:3306 -wait tcp://mqtt2:1883 $NODE_CMD"
-    # command: sh -c "$FEATHERS_CMD"
+    command: sh -c "dockerize -wait tcp://db:3306 -wait tcp://mqtt2:1883 -timeout 60s $NODE_CMD"
     build:
-      context: ../feat13319
-    image: brentgroves/feat13319:1.0.0
+      context: ../eng13319api
+    image: brentgroves/eng13319api:1.0.0
 
     # Container params  
     stdin_open: true  
@@ -80,17 +79,149 @@ services:
       # Sets the image and containers timezone to that of the host system
       - /etc/localtime:/etc/localtime:ro
       # must be absolute path
-      - /home/brent/srcnode/App13319/feat13319:/usr/src/app
-      - feat_node_modules:/usr/src/app/node_modules      
+      - /home/brent/srcnode/App13319/eng13319api:/usr/src/app
+      - eng_api_node_modules:/usr/src/app/node_modules      
     networks:
       - backend
     restart: unless-stopped
-    container_name: feat13319
+    container_name: eng13319api
+
+  tool13319api:
+    # Wait for other containers
+    depends_on:
+      - db
+      - mqtt2      
+    # Image params.  
+    env_file: .env
+    environment:
+      - KORS_USERNAME=$KORS_USERNAME
+      - KORS_PASSWORD=$KORS_PASSWORD
+      - KORS_DATABASE=$KORS_DATABASE
+      - KORS_SERVER=$KORS_SERVER
+      - MSSQL_USER=$MSSQL_USER
+      - MSSQL_PASSWORD=$MSSQL_PASSWORD
+      - MSSQL_DATABASE=$MSSQL_DATABASE
+      - MSSQL_SERVER=$MSSQL_SERVER
+      - FEATHERS_PORT=$FEATHERS_PORT
+      - MQTT_SERVER=mqtt2
+      - MQTT_PORT=$MQTT_PORT
+      - MYSQL_HOSTNAME=db
+      - MYSQL_PORT=$MYSQL_PORT 
+      - MYSQL_USERNAME=$MYSQL_USERNAME
+      - MYSQL_PASSWORD=$MYSQL_PASSWORD
+      - MYSQL_DATABASE=$MYSQL_DATABASE
+      - VIRTUAL_HOST=$TOOL_API_HOST
+      - VIRTUAL_PORT=3030
+    command: sh -c "dockerize -wait tcp://db:3306 -wait tcp://mqtt2:1883 -timeout 60s $NODE_CMD"
+    build:
+      context: ../tool13319api
+    image: brentgroves/tool13319api:1.0.0
+
+    # Container params  
+    stdin_open: true  
+    volumes:
+      # Sets the image and containers timezone to that of the host system
+      - /etc/localtime:/etc/localtime:ro
+      # must be absolute path
+      - /home/brent/srcnode/App13319/tool13319api:/usr/src/app
+      - tool_api_node_modules:/usr/src/app/node_modules      
+    networks:
+      - backend
+    restart: unless-stopped
+    container_name: tool13319api
+
+  prod13319api:
+    # Wait for other containers
+    depends_on:
+      - db
+      - mqtt2      
+    # Image params.  
+    env_file: .env
+    environment:
+      - KORS_USERNAME=$KORS_USERNAME
+      - KORS_PASSWORD=$KORS_PASSWORD
+      - KORS_DATABASE=$KORS_DATABASE
+      - KORS_SERVER=$KORS_SERVER
+      - MSSQL_USER=$MSSQL_USER
+      - MSSQL_PASSWORD=$MSSQL_PASSWORD
+      - MSSQL_DATABASE=$MSSQL_DATABASE
+      - MSSQL_SERVER=$MSSQL_SERVER
+      - FEATHERS_PORT=$FEATHERS_PORT
+      - MQTT_SERVER=mqtt2
+      - MQTT_PORT=$MQTT_PORT
+      - MYSQL_HOSTNAME=db
+      - MYSQL_PORT=$MYSQL_PORT 
+      - MYSQL_USERNAME=$MYSQL_USERNAME
+      - MYSQL_PASSWORD=$MYSQL_PASSWORD
+      - MYSQL_DATABASE=$MYSQL_DATABASE
+      - VIRTUAL_HOST=$PROD_API_HOST
+      - VIRTUAL_PORT=3030
+    command: sh -c "dockerize -wait tcp://db:3306 -wait tcp://mqtt2:1883 -timeout 60s $NODE_CMD"
+    build:
+      context: ../prod13319api
+    image: brentgroves/prod13319api:1.0.0
+
+    # Container params  
+    stdin_open: true  
+    volumes:
+      # Sets the image and containers timezone to that of the host system
+      - /etc/localtime:/etc/localtime:ro
+      # must be absolute path
+      - /home/brent/srcnode/App13319/prod13319api:/usr/src/app
+      - prod_api_node_modules:/usr/src/app/node_modules      
+    networks:
+      - backend
+    restart: unless-stopped
+    container_name: prod13319api
+
+  gm13319api:
+    # Wait for other containers
+    depends_on:
+      - db
+      - mqtt2      
+    # Image params.  
+    env_file: .env
+    environment:
+      - KORS_USERNAME=$KORS_USERNAME
+      - KORS_PASSWORD=$KORS_PASSWORD
+      - KORS_DATABASE=$KORS_DATABASE
+      - KORS_SERVER=$KORS_SERVER
+      - MSSQL_USER=$MSSQL_USER
+      - MSSQL_PASSWORD=$MSSQL_PASSWORD
+      - MSSQL_DATABASE=$MSSQL_DATABASE
+      - MSSQL_SERVER=$MSSQL_SERVER
+      - FEATHERS_PORT=$FEATHERS_PORT
+      - MQTT_SERVER=mqtt2
+      - MQTT_PORT=$MQTT_PORT
+      - MYSQL_HOSTNAME=db
+      - MYSQL_PORT=$MYSQL_PORT 
+      - MYSQL_USERNAME=$MYSQL_USERNAME
+      - MYSQL_PASSWORD=$MYSQL_PASSWORD
+      - MYSQL_DATABASE=$MYSQL_DATABASE
+      - VIRTUAL_HOST=$GM_API_HOST
+      - VIRTUAL_PORT=3030
+    command: sh -c "dockerize -wait tcp://db:3306 -wait tcp://mqtt2:1883 -timeout 60s $NODE_CMD"
+    build:
+      context: ../gm13319api
+    image: brentgroves/gm13319api:1.0.0
+
+    # Container params  
+    stdin_open: true  
+    volumes:
+      # Sets the image and containers timezone to that of the host system
+      - /etc/localtime:/etc/localtime:ro
+      # must be absolute path
+      - /home/brent/srcnode/App13319/gm13319api:/usr/src/app
+      - gm_api_node_modules:/usr/src/app/node_modules      
+    networks:
+      - backend
+    restart: unless-stopped
+    container_name: gm13319api
 
   tool13319:
     # Wait for other containers
     depends_on:
-      - feat13319
+      - tool13319api
     # Image params.  
     env_file: .env
     environment:
@@ -98,7 +229,7 @@ services:
       - VIRTUAL_HOST=$TOOL_PWA_HOST
       - VIRTUAL_PORT=3000
     # command: sh -c "$REACT_CMD"
-    command: sh -c "dockerize -wait tcp://feat13319:3030 $PWA_CMD"
+    command: sh -c "dockerize -wait tcp://tool13319api:3030 -timeout 60s $PWA_CMD"
     build:
       context: ../tool13319
     image: brentgroves/tool13319:1.0.0
@@ -121,7 +252,7 @@ services:
   eng13319:
     # Wait for other containers
     depends_on:
-      - feat13319
+      - gm13319api
     # Image params.  
     env_file: .env
     environment:
@@ -129,7 +260,7 @@ services:
       - VIRTUAL_HOST=$ENG_PWA_HOST
       - VIRTUAL_PORT=3000
     # command: sh -c "$REACT_CMD"
-    command: sh -c "dockerize -wait tcp://feat13319:3030 $PWA_CMD"
+    command: sh -c "dockerize -wait tcp://eng13319api:3030 -timeout 60s $PWA_CMD"
     build:
       context: ../eng13319
     image: brentgroves/eng13319:1.0.0
@@ -152,7 +283,7 @@ services:
   prod13319:
     # Wait for other containers
     depends_on:
-      - feat13319
+      - prod13319api
     # Image params.  
     env_file: .env
     environment:
@@ -160,7 +291,7 @@ services:
       - VIRTUAL_HOST=$PROD_PWA_HOST
       - VIRTUAL_PORT=3000
     # command: sh -c "$REACT_CMD"
-    command: sh -c "dockerize -wait tcp://feat13319:3030 $PWA_CMD"
+    command: sh -c "dockerize -wait tcp://prod13319api:3030 -timeout 60s $PWA_CMD"
     build:
       context: ../prod13319
     image: brentgroves/prod13319:1.0.0
@@ -180,6 +311,37 @@ services:
     restart: unless-stopped
     container_name: prod13319
 
+  gm13319:
+    # Wait for other containers
+    depends_on:
+      - gm13319api
+    # Image params.  
+    env_file: .env
+    environment:
+      # - NODE_ENV=$NODE_ENV
+      - VIRTUAL_HOST=$GM_PWA_HOST
+      - VIRTUAL_PORT=3000
+    # command: sh -c "$REACT_CMD"
+    command: sh -c "dockerize -wait tcp://gm13319api:3030 -timeout 60s $PWA_CMD"
+    build:
+      context: ../gm13319
+    image: brentgroves/gm13319:1.0.0
+
+    # Container params  
+    stdin_open: true  
+    volumes:
+      # Sets the image and containers timezone to that of the host system
+      - /etc/localtime:/etc/localtime:ro
+      # must be absolute path
+      - /home/brent/srcnode/App13319/gm13319:/usr/src/app
+      - gm_node_modules:/usr/src/app/node_modules      
+      - gm_build:/usr/src/app/build      
+    networks:
+      - backend
+      - frontend
+    restart: unless-stopped
+    container_name: gm13319
+
   alarms13319:
     # Wait for other containers
     depends_on:
@@ -190,7 +352,7 @@ services:
       - MQTT_SERVER=mqtt2
       - MQTT_PORT=$MQTT_PORT
       - NODE_ENV=$NODE_ENV
-    command: sh -c "dockerize -wait tcp://mqtt2:1883 $NODE_CMD"
+    command: sh -c "dockerize -wait tcp://mqtt2:1883 -timeout 60s $NODE_CMD"
     build:
       context: ../alarms13319
     image: brentgroves/alarms13319:1.0.0
@@ -219,7 +381,7 @@ services:
       - MQTT_SERVER=mqtt2
       - MQTT_PORT=$MQTT_PORT
       - NODE_ENV=$NODE_ENV
-    command: sh -c "dockerize -wait tcp://mqtt2:1883 $NODE_CMD"
+    command: sh -c "dockerize -wait tcp://mqtt2:1883 -timeout 60s $NODE_CMD"
     # command: sh -c "dockerize -wait tcp://db:3306 -wait tcp://mqtt2:1883 $NODE_CMD"
     build:
       context: ../mailer13319
@@ -244,7 +406,11 @@ services:
       - eng13319
       - tool13319
       - prod13319
-      - feat13319
+      - gm13319
+      - eng13319api
+      - tool13319api
+      - prod13319api
+      - gm13319api
     # Image params.  
     image: jwilder/nginx-proxy
     # Container params  
@@ -269,12 +435,17 @@ networks:
 
 
 volumes:
-  feat_node_modules:
   tool_node_modules:
+  tool_api_node_modules:
   tool_build:
   eng_node_modules:
+  eng_api_node_modules:
   eng_build:
   prod_node_modules:
+  prod_api_node_modules:
   prod_build:
+  gm_node_modules:
+  gm_api_node_modules:
+  gm_build:
   alarms_node_modules:
   mailer_node_modules:
